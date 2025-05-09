@@ -1,7 +1,7 @@
 from Game import *
 
 def csv_to_game_list() -> list[Game]:
-    text = open("CSVFiles/mainLibrary.csv", "r")
+    text = open("library.csv", "r")
     text = ' '.join([i for i in text])
 
     text = trim_top_text(text, 3)
@@ -33,9 +33,9 @@ def trim_top_text(text: str, parts: int) -> str:
 def create_game_object(properties: list[str]) -> Game:
     id = int(properties[0].replace(" ", ""))
 
-    title = properties[1]
+    title = properties[1].replace('"', '')
 
-    platform = properties[2]
+    platform = properties[2].replace('"', '')
 
     sub_platform = properties[3]
 
@@ -43,20 +43,23 @@ def create_game_object(properties: list[str]) -> Game:
 
     priority = properties[5]
 
-    format = properties[6]
+    game_format = properties[6].replace('"', '')
 
     ownership = properties[7]
 
-    notes = properties[8]  #Replace later with all notes
+    #Notes can be more than one of the items, so this just takes the rest of the items available
+    notes = ''
+    for x in range(len(properties) - 10):
+        notes += properties[x+8]
 
-    if properties[-2] is not "":
+    if properties[-2] != "":
         child_of = int(properties[-2].replace(" ", ""))
     else:
         child_of = None
 
-    last_updated = properties[-1]
+    last_updated = properties[-1].replace('"', '')
 
-    return_game = Game(id, title, platform, sub_platform, status, priority, format, ownership, notes, child_of,
+    return_game = Game(id, title, platform, sub_platform, status, priority, game_format, ownership, notes, child_of,
                        last_updated)
 
     return return_game
