@@ -11,7 +11,7 @@ def csv_to_game_list() -> list[Game]:
     game_list_array = []
 
     for game_entry in game_entries:
-        game_entry_properties = game_entry.split(',')
+        game_entry_properties = parse_csv_line(game_entry)
 
         if len(game_entry_properties) < 3:
             continue
@@ -63,3 +63,33 @@ def create_game_object(properties: list[str]) -> Game:
                        last_updated)
 
     return return_game
+
+def parse_csv_line(line):
+    fields = []
+    field = ''
+    in_quotes = False
+    i = 0
+
+    while i < len(line):
+        char = line[i]
+
+        if char == '"':
+            if in_quotes and i + 1 < len(line) and line[i + 1] == '"':
+                # Escaped quote ("")
+                field += '"'
+                i += 1
+            else:
+                # Toggle in_quotes
+                in_quotes = not in_quotes
+        elif char == ',' and not in_quotes:
+            # End of field
+            fields.append(field)
+            field = ''
+        else:
+            field += char
+
+        i += 1
+
+    # Add the last field
+    fields.append(field)
+    return fields
