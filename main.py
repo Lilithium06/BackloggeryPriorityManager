@@ -5,4 +5,14 @@ import random
 if __name__ == "__main__":
     all_games = CSVReader.csv_interpreter.csv_to_game_list()
 
-    Desktop.main_window.create_and_start_main_window(all_games)
+    filtered_games = []
+
+    for game in all_games:
+        if game.status == "Completed" or game.status == "Beaten":
+            continue
+        if game.ownership == "Wishlist":
+            continue
+
+        filtered_games.append(game)
+
+    Desktop.main_window.create_and_start_main_window(filtered_games)

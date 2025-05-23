@@ -14,3 +14,4 @@ class Game:
     notes: Optional[str]
     child_of: Optional[int]
     last_updated: str
+    elo: int = 1000
